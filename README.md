@@ -1,29 +1,44 @@
-libsnark merkle circuit example
+# ZK-SANRK 示例
 
-The example shows how to generate proof for one merkle path on one merkle tree with depth 3.
+## quick run
 
-1/ init 
- ```
- git submodule update --init --recursive
- ```
-2/ compile
- ```
- mkdir build; cd build; cmake ..; make
- ```
- You can find the "merkle" binary under the merkle folder.
+1. 拉取zksanrk代码
 
-3/ setup
 ```
-./merkle setup
+git submodule update --init --recursive
 ```
 
-4/ prove
+2. 安装zksnark依赖
+
+ubuntu 18.04及以上：
+```
+sudo apt install build-essential cmake git libgmp3-dev libprocps-dev python3-markdown libboost-program-options-dev libssl-dev python3 pkg-config
+```
+其他os：
+参考zksnark库[官方文档](https://github.com/scipr-lab/libsnark#build-instructions)
+
+3. 编译
+
+```
+mkdir build; cd build; cmake ..; make
+```
+编译后，会在`build/merkle`下生成`merkle`二进制文件
+
+4. 初始化配置
+
+```
+cd ./merkle; ./merkle setup
+```
+
+5. 生成证明
+
 ```
 ./merkle prove [data1] [data2] [data3] [data4] [data5] [data6] [data7] [data8] [index]
 ```
-Record down the root information, which is used on verify.
+生成后，命令行会输出root的值，copy下来，在验证时使用
 
-5/ verify
+6. 验证证明
+
 ```
 ./merkle [root]
 ```
