@@ -256,14 +256,14 @@ int main(int argc, char* argv[]) {
         //generate witness
         std::vector<std::vector<libff::bit_vector>> levels(tree_depth);
         //level 2 leaves left most --> right most
-	int leaf_count = std::pow(2, tree_depth);
+	    int leaf_count = std::pow(2, tree_depth);
         for (int i = 0; i < leaf_count; i++) {
             libff::bit_vector tmp = hash256<HashT>(argv[i+2]);
             //std::cout << *binToHex<HashT>(tmp) << std::endl;
             levels[tree_depth - 1].push_back(tmp);
         }
 
-	calcAllLevels<HashT>(levels, tree_depth-1);
+	    calcAllLevels<HashT>(levels, tree_depth-1);
         libff::bit_vector input = levels[0][0];
         input.insert(input.end(), levels[0][1].begin(), levels[0][1].end());
         root = HashT::get_hash(input);
@@ -287,34 +287,34 @@ int main(int argc, char* argv[]) {
         }
         std::cout << "root is " << *binToHex<HashT>(root) << std::endl;
 
-	//generate proof
+	    //generate proof
         auto proof = generate_read_proof<ppzksnark_ppT, FieldT, HashT>(
                 pk, tree_depth, leaf, root, path, address, address_bits);
         if (proof != boost::none) {
             std::cout << "Proof generated!" << std::endl;
         }
 
-	//save the proof
+	    //save the proof
         std::fstream pr("proof.raw", std::ios_base::out);
         pr << (*proof);
         pr.close();
 
     } else if (std::string(argv[1]) == std::string("verify")) {
-	//load proof
+	    //load proof
         std::fstream pr("proof.raw", std::ios_base::in);
         r1cs_gg_ppzksnark_proof<ppzksnark_ppT> proof;
         pr >> proof;
         pr.close();
-	//load vk
+	    //load vk
         std::fstream vkf("merkle_vk.raw", std::ios_base::in);
         r1cs_gg_ppzksnark_verification_key<ppzksnark_ppT> vk;
         vkf >> vk;
         vkf.close();
 
-	//load root
+	    //load root
         std::string r(argv[2]);
         libff::bit_vector root = hexToBin(r);
-	//verify the proof
+	    //verify the proof
         bool ret = verify_read_proof<ppzksnark_ppT, FieldT>(vk, proof, root);
         if (ret) {
             std::cout << "Verification pass!" << std::endl;
