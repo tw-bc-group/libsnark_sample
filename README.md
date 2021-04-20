@@ -40,7 +40,7 @@ cd ./merkle; ./merkle setup
 6. 验证证明
 
 ```
-./merkle [root]
+./merkle verify [root]
 ```
 
 ## 输出示例
